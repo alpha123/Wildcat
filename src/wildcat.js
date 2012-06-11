@@ -4,6 +4,9 @@ function Wildcat(elem, selector) {
     return Wildcat.compile(selector)(elem);
 }
 
+var old = window.Wildcat, cache = Wildcat.cache = [];
+Wildcat.cacheSize = 50;
+
 function isIdent(c) {
     return c > '/' && c < ':' || // 0-9
           (c > '@' && c < '[') || // A-Z
@@ -35,9 +38,6 @@ Wildcat.tokenize = function (selector) {
     }
     return tokens;
 };
-
-Wildcat.cache = [];
-Wildcat.cacheSize = 50;
 
 Wildcat.i = function (array, obj) {
     if ([].indexOf)
@@ -106,8 +106,8 @@ Wildcat.pseudos = {
 };
 
 Wildcat.compile = function (selector, noFn) {
-    if (!noFn && Wildcat.cache[selector])
-        return Wildcat.cache[selector];
+    if (!noFn && cache[selector])
+        return cache[selector];
     for (var tokens = noFn ? selector : Wildcat.tokenize(selector), token, func = [noFn ? '' : 'return '],
     fn = function (elem) { return func(elem, Wildcat); }, i = [0]; token = tokens[i[0]++];) {
         func[0] += i[0] > 1 ? '&&' : '';
@@ -119,15 +119,13 @@ Wildcat.compile = function (selector, noFn) {
     }
     if (!noFn) {
         func = Function('e,W', func[0]);
-        Wildcat.cache.push(selector);
-        Wildcat.cache[selector] = fn;
-        if (Wildcat.cache.length > Wildcat.cacheSize)
-            Wildcat.cache[Wildcat.cache.shift()] = undefined;
+        cache.push(selector);
+        ache[selector] = fn;
+        if (cache.length > Wildcat.cacheSize)
+            delete cache[cache.shift()];
     }
     return noFn ? func[0] : fn;
 };
-
-var old = window.Wildcat;
 
 Wildcat.noConflict = function () {
     window.Wildcat = old;
