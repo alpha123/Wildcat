@@ -1,12 +1,7 @@
 (function (window, undefined) {
 
-function Wildcat(selector, context) {
-    for (var elems = (context || window.document).getElementsByTagName('*'), e, filtered = [], i = 0;
-    e = elems[i++];) {
-        if (Wildcat.match(e, selector))
-            filtered.push(e);
-    }
-    return filtered;
+function Wildcat(elem, selector) {
+    return Wildcat.compile(selector)(elem);
 }
 
 function isIdent(c) {
@@ -130,10 +125,6 @@ Wildcat.compile = function (selector, noFn) {
             Wildcat.cache[Wildcat.cache.shift()] = undefined;
     }
     return noFn ? func[0] : fn;
-};
-
-Wildcat.match = function (elem, selector) {
-    return Wildcat.compile(selector)(elem);
 };
 
 var old = window.Wildcat;
