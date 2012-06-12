@@ -3,6 +3,7 @@ Wildcat is a simple, fast CSS matching engine, weighing in at only 5kb uncompres
     Wildcat.match(DOMElement, selector)
 
 `selector` is a small subset of CSS3 selectors:
+
     - Node name: `div`
     - Universal selector: `*`
     - ID selector: `#id`
