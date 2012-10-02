@@ -120,7 +120,7 @@ Wildcat.compile = function (selector, noFn) {
     if (!noFn) {
         func = Function('e,W', func[0]);
         cache.push(selector);
-        ache[selector] = fn;
+        cache[selector] = fn;
         if (cache.length > Wildcat.cacheSize)
             delete cache[cache.shift()];
     }
